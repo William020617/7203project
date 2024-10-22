@@ -13,5 +13,3 @@ def preprocess_data(data):
     # 其他特征用均值填充
     data.iloc[:, :-3] = data.iloc[:, :-3].fillna(data.mean())
     return data
-
-
