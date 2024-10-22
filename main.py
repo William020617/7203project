@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 import joblib
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 from modeltrain import train_model
 from preprocess import load_data, preprocess_data
 def main():
@@ -27,11 +28,13 @@ def main():
 
     for name, model in models.items():
         # 交叉验证评估
-        accuracy_cv = cross_val_score(model, X, y, cv=5)
-        accuracy = np.mean(accuracy_cv)
-        f1 = f1_score(y, model.predict(X), average='weighted')
+        scoring = ['accuracy', 'f1_weighted']
+        scores = cross_validate(model, X, y, cv=100, scoring=scoring)
+        accuracy = np.mean(scores['test_accuracy'])
+        f1 = np.mean(scores['test_f1_weighted'])
 
-        print(f"{name} - Accuracy (CV): {accuracy:.3f}, F1 Score (CV): {f1:.3f}")
+        print(
+            f"{name} - Cross-validated Accuracy: {np.mean(scores['test_accuracy']):.3f}, F1 Score: {np.mean(scores['test_f1_weighted']):.3f}")
 
         # 进行预测
         test_predictions = model.predict(X_test)
@@ -42,6 +45,7 @@ def main():
         result_report[817, 0] = round(accuracy, 3)  # 准确率
         result_report[817, 1] = round(f1, 3)  # F1分数
         np.savetxt(f'result_{name}.infs4203', result_report, delimiter=',', fmt='%.3f')
+
 
 if __name__ == "__main__":
     main()
