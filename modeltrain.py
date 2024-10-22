@@ -15,8 +15,10 @@ def train_model(X_train, y_train):
     # Random Forest
     rf_model = RandomForestClassifier(random_state=42)
     rf_param_grid = {
-        'n_estimators': [125, 135],
-        'max_depth': [None, 1, 2],
+        'n_estimators': [100, 150, 200],
+        'max_depth': [1, 2, 3],
+        'min_samples_split': [50, 100, 150],
+        'min_samples_leaf': [50, 100, 150],
     }
     rf_grid_search = GridSearchCV(rf_model, rf_param_grid, cv=5)
     rf_grid_search.fit(X_train, y_train)
@@ -25,8 +27,9 @@ def train_model(X_train, y_train):
     # Decision Tree
     dt_model = DecisionTreeClassifier(random_state=42)
     dt_param_grid = {
-        'max_depth': [None, 1, 2],
-        'min_samples_split': [5,10],
+        'max_depth': [1, 2, 3],
+        'min_samples_split': [100, 200, 300],
+        'min_samples_leaf': [50, 100, 150],
     }
     dt_grid_search = GridSearchCV(dt_model, dt_param_grid, cv=5)
     dt_grid_search.fit(X_train, y_train)
@@ -56,12 +59,12 @@ def train_model(X_train, y_train):
     # 打印最佳参数
     for name, model in models.items():
         if name == 'RandomForest':
-            print(f"最佳参数 - 随机森林: n_estimators={rf_grid_search.best_params_['n_estimators']}, max_depth={rf_grid_search.best_params_['max_depth']}")
+            print(f"Best parameters - RandomForest: n_estimators={rf_grid_search.best_params_['n_estimators']}, max_depth={rf_grid_search.best_params_['max_depth']}, min_samples_split = {rf_grid_search.best_params_['min_samples_split']}, min_samples_leaf = {rf_grid_search.best_params_['min_samples_leaf']}")
         elif name == 'DecisionTree':
-            print(f"最佳参数 - 决策树: max_depth={dt_grid_search.best_params_['max_depth']}, min_samples_split={dt_grid_search.best_params_['min_samples_split']}")
+            print(f"Best parameters - DecisionTree: max_depth={dt_grid_search.best_params_['max_depth']}, min_samples_split={dt_grid_search.best_params_['min_samples_split']}, min_samples_leaf = {dt_grid_search.best_params_['min_samples_leaf']}")
         elif name == 'KNN':
-            print(f"最佳参数 - KNN: n_neighbors={knn_grid_search.best_params_['n_neighbors']}, weights={knn_grid_search.best_params_['weights']}")
+            print(f"Best parameters - KNN: n_neighbors={knn_grid_search.best_params_['n_neighbors']}, weights={knn_grid_search.best_params_['weights']}")
         elif name == 'NaiveBayes':
-            print(f"最佳参数 - 朴素贝叶斯: 使用默认参数")
+            print(f"Best parameters - NaiveBayes: Use default parameters")
     return models  # 返回所有模型
 
