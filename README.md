@@ -10,8 +10,8 @@
   - KNN
   - NaiveBayes
 - **Hyperparameters**:
-  - RandomForest: `n_estimators=125`, `max_depth=None`
-  - DecisionTree: `max_depth=1`, `min_samples_split=5`
+  - RandomForest: `n_estimators=100`, `max_depth=1`, `min_samples_split = 100`, `min_samples_leaf = 100`
+  - DecisionTree: `max_depth=1`, `min_samples_split=50`, `min_samples_leaf = 100`
   - KNN: `n_neighbors=11`, `weights=uniform`
   - NaiveBayes: Use default parameters
 
