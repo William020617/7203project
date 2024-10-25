@@ -2,13 +2,12 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 import joblib
-from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import cross_validate
 from modeltrain import train_model
-from preprocess import load_data, preprocess_data
+from preprocess import detect_outlier, preprocess_data
 def main():
     np.random.seed(42)
-    train_data, test_data = load_data('DM_project_24.csv', 'test_data.csv')
+    train_data, test_data = detect_outlier('DM_project_24.csv', 'test_data.csv')
     X = preprocess_data(train_data.iloc[:, :-1])
     y = train_data.iloc[:, -1]
     train_model(X, y)
@@ -29,7 +28,7 @@ def main():
     for name, model in models.items():
         # 交叉验证评估
         scoring = ['accuracy', 'f1_weighted']
-        scores = cross_validate(model, X, y, cv=100, scoring=scoring)
+        scores = cross_validate(model, X, y, cv=5, scoring=scoring)
         accuracy = np.mean(scores['test_accuracy'])
         f1 = np.mean(scores['test_f1_weighted'])
 
