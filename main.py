@@ -37,13 +37,13 @@ def main():
 
         # 进行预测
         test_predictions = model.predict(X_test)
-
+        test_predictions = np.where(test_predictions >= 0.5, 1, 0).astype(int)
         # 保存每个模型的预测结果
-        result_report = np.zeros((818, 2))
-        result_report[:817, 0] = test_predictions  # 预测结果
-        result_report[817, 0] = round(accuracy, 3)  # 准确率
-        result_report[817, 1] = round(f1, 3)  # F1分数
-        np.savetxt(f'result_{name}.infs4203', result_report, delimiter=',', fmt='%.3f')
+        with open(f'result_{name}.infs4203', 'w') as f:
+            for pred in test_predictions:
+                f.write(f"{pred}\n")
+            f.write(f"acc: {accuracy:.3f}\n")
+            f.write(f"F1: {f1:.3f}\n")
 
 
 if __name__ == "__main__":
